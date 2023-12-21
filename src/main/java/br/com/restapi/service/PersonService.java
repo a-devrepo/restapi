@@ -5,9 +5,7 @@ import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 @Service
