@@ -1,11 +1,14 @@
 package br.com.restapi.service;
 
+import br.com.restapi.controller.PersonController;
 import br.com.restapi.exception.ResourceNotFoundException;
 import br.com.restapi.mapper.DozerMapper;
 import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import br.com.restapi.vo.v1.PersonVO;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,7 +37,7 @@ public class PersonService {
 
     public PersonVO update(PersonVO person) {
         logger.info("Updating one person");
-        Person entity = repository.findById(person.getId())
+        Person entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
 
         entity.setFirstName(person.getFirstName());
@@ -50,7 +53,9 @@ public class PersonService {
         logger.info("Finding one person");
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
-        return DozerMapper.parseObject(entity, PersonVO.class);
+        PersonVO vo =  DozerMapper.parseObject(entity, PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+        return vo;
     }
 
     public void delete(Long id) {
