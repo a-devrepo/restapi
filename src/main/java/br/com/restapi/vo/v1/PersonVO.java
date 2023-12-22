@@ -1,6 +1,5 @@
 package br.com.restapi.vo.v1;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.dozermapper.core.Mapping;
@@ -15,14 +14,13 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     private static final long serialVersionUID = 1L;
 
     @Mapping("id")
+    @JsonProperty("id")
     private Long key;
     @JsonProperty("first_name")
     private String firstName;
     @JsonProperty("last_name")
     private String lastName;
-
     private String address;
-    @JsonIgnore
     private String gender;
 
     public PersonVO() {
