@@ -1,6 +1,7 @@
 package br.com.restapi.service;
 
 import br.com.restapi.controller.PersonController;
+import br.com.restapi.exception.RequiredObjectIsNullException;
 import br.com.restapi.exception.ResourceNotFoundException;
 import br.com.restapi.mapper.DozerMapper;
 import br.com.restapi.model.Person;
@@ -34,6 +35,7 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
+        if(person == null) throw  new RequiredObjectIsNullException();
         logger.info("Creating one person");
         var entity = DozerMapper.parseObject(person, Person.class);
         entity = repository.save(entity);
@@ -43,6 +45,7 @@ public class PersonService {
     }
 
     public PersonVO update(PersonVO person) {
+        if(person == null) throw  new RequiredObjectIsNullException();
         logger.info("Updating one person");
         Person entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));

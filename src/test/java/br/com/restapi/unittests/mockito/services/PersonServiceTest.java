@@ -1,6 +1,7 @@
 package br.com.restapi.unittests.mockito.services;
 
 
+import br.com.restapi.exception.RequiredObjectIsNullException;
 import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import br.com.restapi.service.PersonService;
@@ -104,6 +105,28 @@ class PersonServiceTest {
         service.delete(1L);
 
         verify(repository,times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testCreateWithNullObject(){
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+           service.create(null);
+        });
+        String expectedMessage = "It's not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testUpdateWithNullObject(){
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+            service.create(null);
+        });
+        String expectedMessage = "It's not allowed to persist a null object";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
 }
