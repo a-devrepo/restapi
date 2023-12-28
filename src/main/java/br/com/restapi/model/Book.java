@@ -76,13 +76,14 @@ public class Book implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(author, book.author)
-                && Objects.equals(launchDate, book.launchDate)
-                && Objects.equals(price, book.price) && Objects.equals(title, book.title);
+        return Objects.equals(id, book.id)
+                && Objects.equals(author, book.author)
+                && Objects.equals(price, book.price)
+                && Objects.equals(title, book.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, author, launchDate, price, title);
+        return Objects.hash(id, author, price, title);
     }
 }

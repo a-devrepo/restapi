@@ -62,17 +62,18 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
     public void setTitle(String title) {
         this.title = title;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         BookVO bookVO = (BookVO) o;
-        return Objects.equals(key, bookVO.key) && Objects.equals(author, bookVO.author) && Objects.equals(launchDate, bookVO.launchDate) && Objects.equals(price, bookVO.price) && Objects.equals(title, bookVO.title);
+        return Objects.equals(key, bookVO.key) && Objects.equals(author, bookVO.author) && Objects.equals(price, bookVO.price) && Objects.equals(title, bookVO.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), key, author, launchDate, price, title);
+        return Objects.hash(super.hashCode(), key, author, price, title);
     }
 }
