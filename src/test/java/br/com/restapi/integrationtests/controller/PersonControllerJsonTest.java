@@ -79,6 +79,106 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertEquals("M",createdPerson.getGender());
     }
 
+    @Test
+    @Order(2)
+    void testCreateWithWrongOrigin() throws IOException {
+        mockPerson();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, "http://alison.com.br")
+                .setBasePath("/api/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .body(personVO)
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(403)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertNotNull(content);
+        assertEquals("Invalid CORS request", content);
+    }
+
+    @Test
+    @Order(3)
+    void testFindById() throws IOException {
+        mockPerson();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, "http://localhost:8080")
+                .setBasePath("/api/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .pathParam("id",personVO.getId())
+                        .when()
+                        .get("{id}")
+                        .then()
+                        .extract()
+                        .body()
+                        .asString();
+
+        PersonVO persistedPerson = objectMapper.readValue(content, PersonVO.class);
+        personVO = persistedPerson;
+
+        assertNotNull(persistedPerson);
+        assertNotNull(persistedPerson.getId());
+        assertNotNull(persistedPerson.getFirstName());
+        assertNotNull(persistedPerson.getLastName());
+        assertNotNull(persistedPerson.getAddress());
+        assertNotNull(persistedPerson.getGender());
+
+        assertTrue(persistedPerson.getId() > 0);
+
+        assertEquals("Richard",persistedPerson.getFirstName());
+        assertEquals("Stallman",persistedPerson.getLastName());
+        assertEquals("New York City, New York, US",persistedPerson.getAddress());
+        assertEquals("M",persistedPerson.getGender());
+    }
+
+    @Test
+    @Order(4)
+    void testFindByIdWithWrongOrigin() throws IOException {
+        mockPerson();
+
+        specification = new RequestSpecBuilder()
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, "http://alison.com.br")
+                .setBasePath("/api/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .pathParam("id",personVO.getId())
+                        .when()
+                        .get("{id}")
+                        .then()
+                        .statusCode(403)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertNotNull(content);
+        assertEquals("Invalid CORS request", content);
+    }
+
     private void mockPerson() {
         personVO.setFirstName("Richard");
         personVO.setLastName("Stallman");
