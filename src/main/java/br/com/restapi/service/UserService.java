@@ -8,6 +8,7 @@ import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import br.com.restapi.repository.UserRepository;
 import br.com.restapi.vo.v1.PersonVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class UserService implements UserDetailsService {
     private Logger logger = Logger.getLogger(UserService.class.getName());
-
+    @Autowired
     private UserRepository repository;
 
     public UserService(UserRepository repository) {
@@ -32,11 +33,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("Finding one user by name");
-        var user = repository.findByUserName(username);
+        var user = repository.findByUsername(username);
         if (user != null) {
             return user;
         } else {
-            throw new UsernameNotFoundException("Username "+username + " not found");
+            throw new UsernameNotFoundException("Username " + username + " not found");
         }
     }
 }
