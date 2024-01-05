@@ -1,4 +1,4 @@
-package br.com.restapi.securityJwt;
+package br.com.restapi.security.jwt;
 
 import br.com.restapi.exception.InvalidJwtAuthenticationException;
 import br.com.restapi.vo.v1.TokenVO;
