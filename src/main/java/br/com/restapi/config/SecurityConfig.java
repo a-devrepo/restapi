@@ -2,7 +2,6 @@ package br.com.restapi.config;
 
 import br.com.restapi.security.jwt.JwtTokenFilter;
 import br.com.restapi.security.jwt.JwtTokenProvider;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +15,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -26,7 +26,7 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        Map<String,PasswordEncoder> encoders = new HashedMap();
+        Map<String,PasswordEncoder> encoders = new HashMap();
         Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("",8
                 ,185000, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
         encoders.put("pbkdf2", pbkdf2PasswordEncoder);
