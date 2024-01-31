@@ -1,4 +1,4 @@
-package br.com.restapi.integrationtests.controller;
+package br.com.restapi.integrationtests.controller.withjson;
 
 import br.com.restapi.configs.TestConfigs;
 import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;

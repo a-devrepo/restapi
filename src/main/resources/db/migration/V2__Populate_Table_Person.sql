@@ -1,1 +1,1 @@
-INSERT INTO `person` VALUES (6,'Croatia','Nikola','Male','Tesla');
+INSERT INTO `person` VALUES (6,'Nikola','Tesla','Croatia','Male');
