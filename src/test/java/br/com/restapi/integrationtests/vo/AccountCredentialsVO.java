@@ -1,13 +1,16 @@
 package br.com.restapi.integrationtests.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+@XmlRootElement
 public class AccountCredentialsVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @JsonProperty("user_name")
     private String userName;
     private String password;
@@ -20,6 +23,7 @@ public class AccountCredentialsVO implements Serializable {
         this.password = password;
     }
 
+    @XmlAttribute(name = "user_name")
     public String getUserName() {
         return userName;
     }

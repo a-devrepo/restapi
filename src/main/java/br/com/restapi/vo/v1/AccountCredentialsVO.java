@@ -1,6 +1,7 @@
 package br.com.restapi.vo.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class AccountCredentialsVO implements Serializable {
         this.password = password;
     }
 
+    @XmlAttribute(name = "user_name")
     public String getUserName() {
         return userName;
     }
