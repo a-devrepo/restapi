@@ -1,4 +1,4 @@
-package br.com.restapi.integrationtests.controller.withjson;
+package br.com.restapi.integrationtests.controller.withxml;
 
 import br.com.restapi.configs.TestConfigs;
 import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
@@ -6,6 +6,8 @@ import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -13,8 +15,6 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,15 +24,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonControllerJsonTest extends AbstractIntegrationTest {
+public class PersonControllerXmlTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper objectMapper;
+    private static XmlMapper objectMapper;
     private static PersonVO personVO;
 
     @BeforeAll
     public static void setup() {
-        objectMapper = new ObjectMapper();
+        objectMapper = new XmlMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         personVO = new PersonVO();
     }
@@ -45,7 +45,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         String accessToken = given()
                 .basePath("/auth/signin")
                 .port(TestConfigs.SERVER_PORT)
-                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .contentType(TestConfigs.CONTENT_TYPE_XML)
+                .accept(TestConfigs.CONTENT_TYPE_XML)
                 .body(user)
                 .when()
                 .post()
@@ -73,7 +74,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .body(personVO)
                         .when()
                         .post()
@@ -109,7 +111,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .body(personVO)
                         .when()
                         .post()
@@ -145,7 +148,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .pathParam("id",personVO.getId())
                         .when()
                         .get("{id}")
@@ -179,7 +183,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
                 given()
                         .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .pathParam("id",personVO.getId())
                         .when()
                         .delete("{id}")
@@ -194,7 +199,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .body(personVO)
                         .when()
                         .get()
@@ -236,7 +242,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
                 given()
                         .spec(specificationWithoutToken)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
                         .when()
                         .get()
                         .then()

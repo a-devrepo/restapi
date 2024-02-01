@@ -1,12 +1,13 @@
 package br.com.restapi.integrationtests.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-@XmlRootElement
+@XmlRootElement(name = "TokenVO")
 public class TokenVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +35,7 @@ public class TokenVO implements Serializable {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
+
 
     public String getUserName() {
         return userName;
@@ -75,6 +77,7 @@ public class TokenVO implements Serializable {
         this.accessToken = accessToken;
     }
 
+    @XmlElement(name = "refresh_token")
     public String getRefreshToken() {
         return refreshToken;
     }

@@ -3,6 +3,7 @@ package br.com.restapi.vo.v1;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.dozermapper.core.Mapping;
+import jakarta.xml.bind.annotation.XmlElement;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -33,7 +34,7 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     public void setKey(Long key) {
         this.key = key;
     }
-
+    @XmlElement(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -41,7 +42,7 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
+    @XmlElement(name = "last_name")
     public String getLastName() {
         return lastName;
     }
