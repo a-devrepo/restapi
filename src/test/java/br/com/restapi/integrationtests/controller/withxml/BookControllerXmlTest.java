@@ -114,7 +114,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
                         .accept(TestConfigs.CONTENT_TYPE_XML)
                         .body(bookVO)
                         .when()
-                        .post()
+                        .put()
                         .then()
                         .statusCode(200)
                         .extract()
