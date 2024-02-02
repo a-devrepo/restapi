@@ -130,7 +130,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                         .accept(TestConfigs.CONTENT_TYPE_YML)
                         .body(personVO,objectMapper)
                         .when()
-                        .post()
+                        .put()
                         .then()
                         .statusCode(200)
                         .extract()

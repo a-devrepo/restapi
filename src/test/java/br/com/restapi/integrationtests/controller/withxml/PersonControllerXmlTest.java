@@ -115,7 +115,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
                         .accept(TestConfigs.CONTENT_TYPE_XML)
                         .body(personVO)
                         .when()
-                        .post()
+                        .put()
                         .then()
                         .statusCode(200)
                         .extract()
