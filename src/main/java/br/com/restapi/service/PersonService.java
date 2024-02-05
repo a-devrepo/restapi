@@ -8,6 +8,7 @@ import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import br.com.restapi.vo.v1.PersonVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -63,6 +64,16 @@ public class PersonService {
 
     public PersonVO findById(Long id) {
         logger.info("Finding one person");
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
+        PersonVO vo = DozerMapper.parseObject(entity, PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+        return vo;
+    }
+    @Transactional
+    public PersonVO disablePerson(Long id) {
+        logger.info("Disabling one person");
+        repository.disablePerson(id);
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
         PersonVO vo = DozerMapper.parseObject(entity, PersonVO.class);
