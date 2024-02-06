@@ -92,6 +92,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
         assertTrue(createdPerson.getId() > 0);
 
@@ -128,6 +129,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
         assertEquals(personVO.getId(), createdPerson.getId());
 
@@ -163,6 +165,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
 
         assertEquals(personVO.getId(), persistedPerson.getId());
 
@@ -174,6 +177,40 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
     @Test
     @Order(4)
+    void testDisablePersonById() throws IOException {
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .pathParam("id",personVO.getId())
+                        .when()
+                        .patch("{id}")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        PersonVO persistedPerson = objectMapper.readValue(content, PersonVO.class);
+        personVO = persistedPerson;
+
+        assertNotNull(persistedPerson);
+        assertNotNull(persistedPerson.getId());
+        assertNotNull(persistedPerson.getFirstName());
+        assertNotNull(persistedPerson.getLastName());
+        assertNotNull(persistedPerson.getAddress());
+        assertFalse(persistedPerson.getEnabled());
+
+        assertEquals(personVO.getId(), persistedPerson.getId());
+
+        assertEquals("Richard",persistedPerson.getFirstName());
+        assertEquals("Stallman III",persistedPerson.getLastName());
+        assertEquals("New York City, New York, US",persistedPerson.getAddress());
+        assertEquals("M",persistedPerson.getGender());
+    }
+
+    @Test
+    @Order(5)
     void testDelete() throws IOException {
         mockPerson();
 
@@ -188,7 +225,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void testFindAll() throws IOException {
 
         var content =
@@ -224,7 +261,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void testFindAllWithoutToken() throws IOException {
 
        RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
@@ -251,5 +288,6 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         personVO.setLastName("Stallman");
         personVO.setAddress("New York City, New York, US");
         personVO.setGender("M");
+        personVO.setEnabled(true);
     }
 }
