@@ -7,6 +7,8 @@ import br.com.restapi.mapper.DozerMapper;
 import br.com.restapi.model.Person;
 import br.com.restapi.repository.PersonRepository;
 import br.com.restapi.vo.v1.PersonVO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +28,15 @@ public class PersonService {
         this.repository = repository;
     }
 
-    public List<PersonVO> findAll() {
+    public Page<PersonVO> findAll(Pageable pageable) {
         logger.info("Finding all");
-        var persons = DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
-        persons.stream()
-                .forEach(p -> p.add(linkTo(methodOn(PersonController.class)
-                        .findById(p.getKey())).withSelfRel()));
-        return persons;
+
+        var personPage  = repository.findAll(pageable);
+        var personVOPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+        personVOPage.map(p -> p.add(linkTo(methodOn(PersonController.class)
+                .findById(p.getKey())).withSelfRel()));
+
+        return personVOPage;
     }
 
     public PersonVO create(PersonVO person) {

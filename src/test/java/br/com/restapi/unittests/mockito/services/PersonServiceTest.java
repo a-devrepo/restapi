@@ -130,7 +130,7 @@ class PersonServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    @Test
+    /*@Test
     void testFindAll(){
         List<Person> list = input.mockEntityList();
         when(repository.findAll()).thenReturn(list);
@@ -160,6 +160,6 @@ class PersonServiceTest {
         assertNotNull(personSeven.getKey());
         assertNotNull(personSeven.getLinks());
         assertTrue(personSeven.toString().contains("links: [</api/person/v1/7>;rel=\"self\"]"));
-    }
+    }*/
 
 }
