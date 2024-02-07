@@ -7,6 +7,7 @@ import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.BookVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.pagedmodels.PagedModelBook;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -211,7 +212,7 @@ public class BookControllerYamlTest extends AbstractIntegrationTest {
     @Test
     @Order(5)
     void testFindAll() throws IOException {
-        var content =
+        var wrapper =
                 given()
                         .spec(specification)
                         .config(
@@ -223,16 +224,16 @@ public class BookControllerYamlTest extends AbstractIntegrationTest {
                                                         ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
+                        .queryParams("page", 0, "size", 10, "direction", "asc")
                         .when()
                         .get()
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(BookVO[].class, objectMapper);
+                        .as(PagedModelBook.class, objectMapper);
 
-
-        List<BookVO> books = Arrays.asList(content);
+        var books = wrapper.getContent();
 
         BookVO foundBookOne = books.get(0);
 
@@ -244,9 +245,9 @@ public class BookControllerYamlTest extends AbstractIntegrationTest {
 
         assertTrue(foundBookOne.getId() > 0);
 
-        assertEquals("Working effectively with legacy code",foundBookOne.getTitle());
-        assertEquals("Michael C. Feathers",foundBookOne.getAuthor());
-        assertEquals(49.00,foundBookOne.getPrice());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
+        assertEquals(54.00, foundBookOne.getPrice());
     }
 
     @Test

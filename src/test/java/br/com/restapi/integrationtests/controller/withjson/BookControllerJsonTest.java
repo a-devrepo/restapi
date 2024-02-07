@@ -6,6 +6,7 @@ import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.BookVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.wrappers.WrapperBookVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,10 +96,10 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
         assertTrue(persistedBook.getId() > 0);
 
-        assertEquals("J.R.R.Tolkien",persistedBook.getAuthor());
-        assertEquals("Lord of The Rings",persistedBook.getTitle());
-        assertEquals(new GregorianCalendar(1954,07,29).getTime(),persistedBook.getLaunchDate());
-        assertEquals(70.00,persistedBook.getPrice());
+        assertEquals("J.R.R.Tolkien", persistedBook.getAuthor());
+        assertEquals("Lord of The Rings", persistedBook.getTitle());
+        assertEquals(new GregorianCalendar(1954, 07, 29).getTime(), persistedBook.getLaunchDate());
+        assertEquals(70.00, persistedBook.getPrice());
     }
 
     @Test
@@ -129,10 +130,10 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
         assertEquals(bookVO.getId(), updatedBook.getId());
 
-        assertEquals("LOTR - The Fellowship of the Ring",updatedBook.getTitle());
-        assertEquals("J.R.R.Tolkien",updatedBook.getAuthor());
-        assertEquals(new GregorianCalendar(1954,07,29).getTime(),updatedBook.getLaunchDate());
-        assertEquals(70.00,updatedBook.getPrice());
+        assertEquals("LOTR - The Fellowship of the Ring", updatedBook.getTitle());
+        assertEquals("J.R.R.Tolkien", updatedBook.getAuthor());
+        assertEquals(new GregorianCalendar(1954, 07, 29).getTime(), updatedBook.getLaunchDate());
+        assertEquals(70.00, updatedBook.getPrice());
     }
 
     @Test
@@ -142,7 +143,7 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 given()
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                        .pathParam("id",bookVO.getId())
+                        .pathParam("id", bookVO.getId())
                         .when()
                         .get("{id}")
                         .then()
@@ -160,10 +161,10 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
         assertEquals(bookVO.getId(), foundBook.getId());
 
-        assertEquals("LOTR - The Fellowship of the Ring",foundBook.getTitle());
-        assertEquals("J.R.R.Tolkien",foundBook.getAuthor());
-        assertEquals(new GregorianCalendar(1954,07,29).getTime(),foundBook.getLaunchDate());
-        assertEquals(70.00,foundBook.getPrice());
+        assertEquals("LOTR - The Fellowship of the Ring", foundBook.getTitle());
+        assertEquals("J.R.R.Tolkien", foundBook.getAuthor());
+        assertEquals(new GregorianCalendar(1954, 07, 29).getTime(), foundBook.getLaunchDate());
+        assertEquals(70.00, foundBook.getPrice());
     }
 
     @Test
@@ -171,14 +172,14 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
     void testDelete() throws IOException {
         mockBook();
 
-                given()
-                        .spec(specification)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                        .pathParam("id",bookVO.getId())
-                        .when()
-                        .delete("{id}")
-                        .then()
-                        .statusCode(204);
+        given()
+                .spec(specification)
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .pathParam("id", bookVO.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
     }
 
     @Test
@@ -189,6 +190,8 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 given()
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .accept(TestConfigs.CONTENT_TYPE_JSON)
+                        .queryParams("page", 0, "size", 10, "direction", "asc")
                         .body(bookVO)
                         .when()
                         .get()
@@ -199,7 +202,9 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                         .asString();
 
 
-        List<BookVO> books = objectMapper.readValue(content, new TypeReference<List<BookVO>>(){});
+        WrapperBookVO wrapper = objectMapper.readValue(content, WrapperBookVO.class);
+
+        var books = wrapper.getEmbedded().getBooks();
 
         BookVO foundBookOne = books.get(0);
 
@@ -211,38 +216,38 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
 
         assertTrue(foundBookOne.getId() > 0);
 
-        assertEquals("Working effectively with legacy code",foundBookOne.getTitle());
-        assertEquals("Michael C. Feathers",foundBookOne.getAuthor());
-        assertEquals(49.00,foundBookOne.getPrice());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
+        assertEquals(54.00, foundBookOne.getPrice());
     }
 
     @Test
     @Order(6)
     void testFindAllWithoutToken() throws IOException {
 
-       RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
+        RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
                 .setBasePath("/api/book/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
-                given()
-                        .spec(specificationWithoutToken)
-                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                        .when()
-                        .get()
-                        .then()
-                        .statusCode(403)
-                        .extract()
-                        .body()
-                        .asString();
+        given()
+                .spec(specificationWithoutToken)
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .when()
+                .get()
+                .then()
+                .statusCode(403)
+                .extract()
+                .body()
+                .asString();
     }
 
     private void mockBook() {
         bookVO.setTitle("Lord of The Rings");
         bookVO.setAuthor("J.R.R.Tolkien");
-        bookVO.setLaunchDate(new GregorianCalendar(1954,07,29).getTime());
+        bookVO.setLaunchDate(new GregorianCalendar(1954, 07, 29).getTime());
         bookVO.setPrice(70.00);
     }
 }
