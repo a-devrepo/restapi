@@ -6,6 +6,7 @@ import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.pagedmodels.PagedModelPerson;
 import br.com.restapi.integrationtests.vo.wrappers.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
@@ -273,16 +274,17 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                                         ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
+                        .queryParams("page",3, "size",10,"direction","asc")
                         .when()
                         .get()
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(WrapperPersonVO.class,objectMapper);
+                        .as(PagedModelPerson.class,objectMapper);
 
 
-        var people = wrapper.getEmbedded().getPersons();
+        var people = wrapper.getContent();
 
         PersonVO foundPersonOne = people.get(0);
 
@@ -293,11 +295,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getGender());
         assertTrue(foundPersonOne.getEnabled());
 
-        assertTrue(foundPersonOne.getId() > 0);
-
-        assertEquals("Nikola",foundPersonOne.getFirstName());
-        assertEquals("Tesla",foundPersonOne.getLastName());
-        assertEquals("Croatia",foundPersonOne.getAddress());
+        assertEquals(673,foundPersonOne.getId());
+        assertEquals("Alic",foundPersonOne.getFirstName());
+        assertEquals("Terbrug",foundPersonOne.getLastName());
+        assertEquals("3 Eagle Crest Court",foundPersonOne.getAddress());
         assertEquals("Male",foundPersonOne.getGender());
     }
 
