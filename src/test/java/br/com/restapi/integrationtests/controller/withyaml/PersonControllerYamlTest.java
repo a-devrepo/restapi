@@ -6,6 +6,7 @@ import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.wrappers.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -260,7 +261,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     @Order(6)
     void testFindAll() throws IOException {
 
-        var content =
+        var wrapper =
                 given()
                         .spec(specification)
                         .config(
@@ -278,10 +279,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(PersonVO[].class,objectMapper);
+                        .as(WrapperPersonVO.class,objectMapper);
 
 
-        List<PersonVO> people = Arrays.asList(content);
+        var people = wrapper.getEmbedded().getPersons();
 
         PersonVO foundPersonOne = people.get(0);
 

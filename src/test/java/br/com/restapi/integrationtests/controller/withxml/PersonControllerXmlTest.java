@@ -5,6 +5,7 @@ import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -244,7 +245,8 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
                         .asString();
 
 
-        List<PersonVO> people = objectMapper.readValue(content, new TypeReference<List<PersonVO>>(){});
+        WrapperPersonVO wrapper = objectMapper.readValue(content, WrapperPersonVO.class);
+        var people = wrapper.getEmbedded().getPersons();
 
         PersonVO foundPersonOne = people.get(0);
 

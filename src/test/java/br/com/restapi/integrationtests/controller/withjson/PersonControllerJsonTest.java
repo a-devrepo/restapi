@@ -5,6 +5,7 @@ import br.com.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.restapi.integrationtests.vo.AccountCredentialsVO;
 import br.com.restapi.integrationtests.vo.PersonVO;
 import br.com.restapi.integrationtests.vo.TokenVO;
+import br.com.restapi.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -232,7 +233,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                 given()
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                        .body(personVO)
+                        .queryParams("page",3, "size",10,"direction","asc")
                         .when()
                         .get()
                         .then()
@@ -242,7 +243,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                         .asString();
 
 
-        List<PersonVO> people = objectMapper.readValue(content, new TypeReference<List<PersonVO>>(){});
+        WrapperPersonVO wrapper = objectMapper.readValue(content, WrapperPersonVO.class);
+        var people = wrapper.getEmbedded().getPersons();
 
         PersonVO foundPersonOne = people.get(0);
 
@@ -253,11 +255,10 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getGender());
         assertTrue(foundPersonOne.getEnabled());
 
-        assertTrue(foundPersonOne.getId() > 0);
-
-        assertEquals("Nikola",foundPersonOne.getFirstName());
-        assertEquals("Tesla",foundPersonOne.getLastName());
-        assertEquals("Croatia",foundPersonOne.getAddress());
+        assertEquals(673,foundPersonOne.getId());
+        assertEquals("Alic",foundPersonOne.getFirstName());
+        assertEquals("Terbrug",foundPersonOne.getLastName());
+        assertEquals("3 Eagle Crest Court",foundPersonOne.getAddress());
         assertEquals("Male",foundPersonOne.getGender());
     }
 
