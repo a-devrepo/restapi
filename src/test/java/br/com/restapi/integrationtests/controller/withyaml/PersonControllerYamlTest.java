@@ -55,14 +55,14 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                 .port(TestConfigs.SERVER_PORT)
                 .contentType(TestConfigs.CONTENT_TYPE_YML)
                 .accept(TestConfigs.CONTENT_TYPE_YML)
-                .body(user,objectMapper)
+                .body(user, objectMapper)
                 .when()
                 .post()
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(TokenVO.class,objectMapper)
+                .as(TokenVO.class, objectMapper)
                 .getAccessToken();
 
         specification = new RequestSpecBuilder()
@@ -89,14 +89,14 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                         .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .body(personVO,objectMapper)
+                        .body(personVO, objectMapper)
                         .when()
                         .post()
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(PersonVO.class,objectMapper);
+                        .as(PersonVO.class, objectMapper);
 
         personVO = createdPerson;
 
@@ -110,10 +110,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
         assertTrue(createdPerson.getId() > 0);
 
-        assertEquals("Richard",createdPerson.getFirstName());
-        assertEquals("Stallman",createdPerson.getLastName());
-        assertEquals("New York City, New York, US",createdPerson.getAddress());
-        assertEquals("M",createdPerson.getGender());
+        assertEquals("Richard", createdPerson.getFirstName());
+        assertEquals("Stallman", createdPerson.getLastName());
+        assertEquals("New York City, New York, US", createdPerson.getAddress());
+        assertEquals("M", createdPerson.getGender());
     }
 
     @Test
@@ -131,14 +131,14 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                         .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .body(personVO,objectMapper)
+                        .body(personVO, objectMapper)
                         .when()
                         .put()
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(PersonVO.class,objectMapper);
+                        .as(PersonVO.class, objectMapper);
 
         personVO = createdPerson;
 
@@ -152,10 +152,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
         assertEquals(personVO.getId(), createdPerson.getId());
 
-        assertEquals("Richard",createdPerson.getFirstName());
-        assertEquals("Stallman III",createdPerson.getLastName());
-        assertEquals("New York City, New York, US",createdPerson.getAddress());
-        assertEquals("M",createdPerson.getGender());
+        assertEquals("Richard", createdPerson.getFirstName());
+        assertEquals("Stallman III", createdPerson.getLastName());
+        assertEquals("New York City, New York, US", createdPerson.getAddress());
+        assertEquals("M", createdPerson.getGender());
     }
 
     @Test
@@ -172,13 +172,13 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                         .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .pathParam("id",personVO.getId())
+                        .pathParam("id", personVO.getId())
                         .when()
                         .get("{id}")
                         .then()
                         .extract()
                         .body()
-                        .as(PersonVO.class,objectMapper);
+                        .as(PersonVO.class, objectMapper);
 
         personVO = persistedPerson;
 
@@ -192,10 +192,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
         assertEquals(personVO.getId(), persistedPerson.getId());
 
-        assertEquals("Richard",persistedPerson.getFirstName());
-        assertEquals("Stallman III",persistedPerson.getLastName());
-        assertEquals("New York City, New York, US",persistedPerson.getAddress());
-        assertEquals("M",persistedPerson.getGender());
+        assertEquals("Richard", persistedPerson.getFirstName());
+        assertEquals("Stallman III", persistedPerson.getLastName());
+        assertEquals("New York City, New York, US", persistedPerson.getAddress());
+        assertEquals("M", persistedPerson.getGender());
     }
 
     @Test
@@ -212,13 +212,13 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                         .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .pathParam("id",personVO.getId())
+                        .pathParam("id", personVO.getId())
                         .when()
                         .patch("{id}")
                         .then()
                         .extract()
                         .body()
-                        .as(PersonVO.class,objectMapper);
+                        .as(PersonVO.class, objectMapper);
 
         personVO = persistedPerson;
 
@@ -232,30 +232,30 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
         assertEquals(personVO.getId(), persistedPerson.getId());
 
-        assertEquals("Richard",persistedPerson.getFirstName());
-        assertEquals("Stallman III",persistedPerson.getLastName());
-        assertEquals("New York City, New York, US",persistedPerson.getAddress());
-        assertEquals("M",persistedPerson.getGender());
+        assertEquals("Richard", persistedPerson.getFirstName());
+        assertEquals("Stallman III", persistedPerson.getLastName());
+        assertEquals("New York City, New York, US", persistedPerson.getAddress());
+        assertEquals("M", persistedPerson.getGender());
     }
 
     @Test
     @Order(5)
     void testDelete() throws IOException {
 
-                given()
-                        .spec(specification)
-                        .config(RestAssuredConfig
-                                .config()
-                                .encoderConfig(EncoderConfig
-                                        .encoderConfig()
-                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
-                        .contentType(TestConfigs.CONTENT_TYPE_YML)
-                        .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .pathParam("id",personVO.getId())
-                        .when()
-                        .delete("{id}")
-                        .then()
-                        .statusCode(204);
+        given()
+                .spec(specification)
+                .config(RestAssuredConfig
+                        .config()
+                        .encoderConfig(EncoderConfig
+                                .encoderConfig()
+                                .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .pathParam("id", personVO.getId())
+                .when()
+                .delete("{id}")
+                .then()
+                .statusCode(204);
     }
 
     @Test
@@ -274,14 +274,14 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                                         ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .queryParams("page",3, "size",10,"direction","asc")
+                        .queryParams("page", 3, "size", 10, "direction", "asc")
                         .when()
                         .get()
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(PagedModelPerson.class,objectMapper);
+                        .as(PagedModelPerson.class, objectMapper);
 
 
         var people = wrapper.getContent();
@@ -295,11 +295,11 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getGender());
         assertTrue(foundPersonOne.getEnabled());
 
-        assertEquals(673,foundPersonOne.getId());
-        assertEquals("Alic",foundPersonOne.getFirstName());
-        assertEquals("Terbrug",foundPersonOne.getLastName());
-        assertEquals("3 Eagle Crest Court",foundPersonOne.getAddress());
-        assertEquals("Male",foundPersonOne.getGender());
+        assertEquals(673, foundPersonOne.getId());
+        assertEquals("Alic", foundPersonOne.getFirstName());
+        assertEquals("Terbrug", foundPersonOne.getLastName());
+        assertEquals("3 Eagle Crest Court", foundPersonOne.getAddress());
+        assertEquals("Male", foundPersonOne.getGender());
     }
 
     @Test
@@ -318,15 +318,15 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
                                                         ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
-                        .pathParam("firstName","ryn")
-                        .queryParams("page",0, "size",6,"direction","asc")
+                        .pathParam("firstName", "ryn")
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
                         .when()
                         .get("findPersonByName/{firstName}")
                         .then()
                         .statusCode(200)
                         .extract()
                         .body()
-                        .as(PagedModelPerson.class,objectMapper);
+                        .as(PagedModelPerson.class, objectMapper);
 
 
         var people = wrapper.getContent();
@@ -340,35 +340,72 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getGender());
         assertTrue(foundPersonOne.getEnabled());
 
-        assertEquals(483,foundPersonOne.getId());
-        assertEquals("Daryn",foundPersonOne.getFirstName());
-        assertEquals("O'Sheils",foundPersonOne.getLastName());
-        assertEquals("80 Dottie Court",foundPersonOne.getAddress());
-        assertEquals("Female",foundPersonOne.getGender());
+        assertEquals(483, foundPersonOne.getId());
+        assertEquals("Daryn", foundPersonOne.getFirstName());
+        assertEquals("O'Sheils", foundPersonOne.getLastName());
+        assertEquals("80 Dottie Court", foundPersonOne.getAddress());
+        assertEquals("Female", foundPersonOne.getGender());
     }
 
     @Test
     @Order(8)
     void testFindAllWithoutToken() throws IOException {
 
-       RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
+        RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
                 .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
+        given()
+                .spec(specificationWithoutToken)
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .when()
+                .get()
+                .then()
+                .statusCode(403)
+                .extract()
+                .body()
+                .asString();
+    }
+
+    @Test
+    @Order(9)
+    void testHateoas() throws IOException {
+
+        var unthreatedContent =
                 given()
-                        .spec(specificationWithoutToken)
+                        .spec(specification)
+                        .config(
+                                RestAssuredConfig
+                                        .config()
+                                        .encoderConfig(EncoderConfig.encoderConfig()
+                                                .encodeContentTypeAs(
+                                                        TestConfigs.CONTENT_TYPE_YML,
+                                                        ContentType.TEXT)))
                         .contentType(TestConfigs.CONTENT_TYPE_YML)
                         .accept(TestConfigs.CONTENT_TYPE_YML)
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
                         .when()
                         .get()
                         .then()
-                        .statusCode(403)
+                        .statusCode(200)
                         .extract()
                         .body()
                         .asString();
+
+        var content = unthreatedContent.replace("\r","").replace("\n","");
+
+        assertTrue(content.contains("rel: \"self\"    href: \"http://localhost:8888/api/person/v1/697\""));
+        assertTrue(content.contains("rel: \"self\"    href: \"http://localhost:8888/api/person/v1/726\""));
+        assertTrue(content.contains("rel: \"self\"    href: \"http://localhost:8888/api/person/v1/376\""));
+        assertTrue(content.contains("rel: \"first\"  href: \"http://localhost:8888/api/person/v1?direction=asc&page=0&size=6&sort=firstName,asc\""));
+        assertTrue(content.contains("rel: \"self\"  href: \"http://localhost:8888/api/person/v1?page=0&size=6&direction=asc\""));
+        assertTrue(content.contains("rel: \"next\"  href: \"http://localhost:8888/api/person/v1?direction=asc&page=1&size=6&sort=firstName,asc\""));
+        assertTrue(content.contains("rel: \"last\"  href: \"http://localhost:8888/api/person/v1?direction=asc&page=166&size=6&sort=firstName,asc\""));
+
     }
 
     private void mockPerson() {

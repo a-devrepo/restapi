@@ -328,6 +328,34 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
                         .asString();
     }
 
+    @Test
+    @Order(9)
+    void testHateoas() throws IOException {
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
+                        .queryParams("page",0, "size",6,"direction","asc")
+                        .when()
+                        .get()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/697</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/726</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1/376</href></links>"));
+        assertTrue(content.contains("<links><rel>first</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=0&amp;size=6&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/person/v1?page=0&amp;size=6&amp;direction=asc</href></links>"));
+        assertTrue(content.contains("<links><rel>next</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=1&amp;size=6&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>last</rel><href>http://localhost:8888/api/person/v1?direction=asc&amp;page=166&amp;size=6&amp;sort=firstName,asc</href></links>"));
+        assertTrue(content.contains("<page><size>6</size><totalElements>1001</totalElements><totalPages>167</totalPages><number>0</number></page>"));
+
+    }
+
     private void mockPerson() {
         personVO.setFirstName("Richard");
         personVO.setLastName("Stallman");

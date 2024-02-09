@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -129,37 +128,4 @@ class PersonServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-    /*@Test
-    void testFindAll(){
-        List<Person> list = input.mockEntityList();
-        when(repository.findAll()).thenReturn(list);
-
-        var people = service.findAll();
-
-        assertNotNull(people);
-        assertEquals(14,people.size());
-
-        var personOne = people.get(1);
-
-        assertNotNull(personOne);
-        assertNotNull(personOne.getKey());
-        assertNotNull(personOne.getLinks());
-        assertTrue(personOne.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-
-        var personFour = people.get(4);
-
-        assertNotNull(personFour);
-        assertNotNull(personFour.getKey());
-        assertNotNull(personFour.getLinks());
-        assertTrue(personFour.toString().contains("links: [</api/person/v1/4>;rel=\"self\"]"));
-
-        var personSeven = people.get(7);
-
-        assertNotNull(personSeven);
-        assertNotNull(personSeven.getKey());
-        assertNotNull(personSeven.getLinks());
-        assertTrue(personSeven.toString().contains("links: [</api/person/v1/7>;rel=\"self\"]"));
-    }*/
-
 }
