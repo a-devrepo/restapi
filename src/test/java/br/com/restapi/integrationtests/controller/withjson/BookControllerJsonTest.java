@@ -244,6 +244,36 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 .asString();
     }
 
+    @Test
+    @Order(7)
+    void testHateoas() throws IOException {
+
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .accept(TestConfigs.CONTENT_TYPE_JSON)
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
+                        .when()
+                        .get()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertTrue(content.contains("_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/12\"}}}"));
+        assertTrue(content.contains("_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/3\"}}}"));
+        assertTrue(content.contains("_links\":{\"self\":{\"href\":\"http://localhost:8888/api/book/v1/5\"}}}"));
+
+        assertTrue(content.contains("\"first\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=0&size=6&sort=title,asc\"}"));
+        assertTrue(content.contains("\"self\":{\"href\":\"http://localhost:8888/api/book/v1?page=0&size=6&direction=asc\"}"));
+        assertTrue(content.contains("\"next\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=1&size=6&sort=title,asc\"}"));
+        assertTrue(content.contains("\"last\":{\"href\":\"http://localhost:8888/api/book/v1?direction=asc&page=2&size=6&sort=title,asc\"}}"));
+        assertTrue(content.contains("\"page\":{\"size\":6,\"totalElements\":15,\"totalPages\":3,\"number\":0}}"));
+
+    }
+
     private void mockBook() {
         bookVO.setTitle("Lord of The Rings");
         bookVO.setAuthor("J.R.R.Tolkien");

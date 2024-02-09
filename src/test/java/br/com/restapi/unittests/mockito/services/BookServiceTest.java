@@ -131,36 +131,4 @@ class BookServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-    /*@Test
-    void testFindAll(){
-        List<Book> list = input.mockEntityList();
-        when(repository.findAll()).thenReturn(list);
-
-        var people = service.findAll(pageable);
-
-        assertNotNull(people);
-        assertEquals(14,people.size());
-
-        var bookOne = people.get(1);
-
-        assertNotNull(bookOne);
-        assertNotNull(bookOne.getKey());
-        assertNotNull(bookOne.getLinks());
-        assertTrue(bookOne.toString().contains("links: [</api/book/v1/1>;rel=\"self\"]"));
-
-        var bookFour = people.get(4);
-
-        assertNotNull(bookFour);
-        assertNotNull(bookFour.getKey());
-        assertNotNull(bookFour.getLinks());
-        assertTrue(bookFour.toString().contains("links: [</api/book/v1/4>;rel=\"self\"]"));
-
-        var bookSeven = people.get(7);
-
-        assertNotNull(bookSeven);
-        assertNotNull(bookSeven.getKey());
-        assertNotNull(bookSeven.getLinks());
-        assertTrue(bookSeven.toString().contains("links: [</api/book/v1/7>;rel=\"self\"]"));
-    }*/
 }
