@@ -405,6 +405,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertTrue(content.contains("rel: \"self\"  href: \"http://localhost:8888/api/person/v1?page=0&size=6&direction=asc\""));
         assertTrue(content.contains("rel: \"next\"  href: \"http://localhost:8888/api/person/v1?direction=asc&page=1&size=6&sort=firstName,asc\""));
         assertTrue(content.contains("rel: \"last\"  href: \"http://localhost:8888/api/person/v1?direction=asc&page=166&size=6&sort=firstName,asc\""));
+        assertTrue(content.contains("page:  size: 6  totalElements: 1001  totalPages: 167  number: 0"));
 
     }
 
