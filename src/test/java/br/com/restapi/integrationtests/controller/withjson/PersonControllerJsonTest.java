@@ -211,7 +211,6 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     @Test
     @Order(5)
     void testDelete() throws IOException {
-        mockPerson();
 
                 given()
                         .spec(specification)
