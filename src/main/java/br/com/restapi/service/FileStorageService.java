@@ -2,6 +2,9 @@ package br.com.restapi.service;
 
 import br.com.restapi.config.FileStorageConfig;
 import br.com.restapi.exception.FileStorageException;
+import br.com.restapi.exception.MyFileNotFoundException;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,5 +45,16 @@ public class FileStorageService {
             throw new FileStorageException("Couldn't store file " + fileName + ". Please try again!", e);
         }
 
+    }
+
+    public Resource loadFileAsresource(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) return resource;
+            else throw new MyFileNotFoundException("File not found");
+        } catch (Exception e) {
+            throw new MyFileNotFoundException("File not found " + fileName, e);
+        }
     }
 }
